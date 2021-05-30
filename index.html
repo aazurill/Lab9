@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,6 +26,7 @@
     }
   </style>
 </head>
+
 <body>
   <fieldset>
     <legend>Error Calculator</legend>
@@ -55,6 +57,14 @@
     <button>Trigger a Global Error</button>
   </section>
 
+<script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+<script>
+  window.TrackJS && TrackJS.install({
+    token: "bc91146737e34cacb556069afe7fe20c"
+    // for more configuration options, see https://docs.trackjs.com
+  });
+</script>
+
   <script>
     let calculateBtn = document.querySelector('#calculate');
     calculateBtn.addEventListener('click', () => {
@@ -62,11 +72,71 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      try {
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      } catch (err) {
+        console.error("Error: Calculations failed")
+      } finally {
+        console.log("Finally...")
+      }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
     // TODO - Make buttons functional
+    errorBtns[0].addEventListener('click', () => {
+      console.log("Console Log Demo")
+      TrackJS.track('Testing TrackJS!');
+
+    })
+    errorBtns[1].addEventListener('click', () => {
+      console.error("Console Error Demo")
+
+    })
+    errorBtns[2].addEventListener('click', () => {
+      console.dir(errorBtns[2])
+    })
+    errorBtns[3].addEventListener('click', () => {
+      console.dirxml(document.body);
+    })
+    errorBtns[4].addEventListener('click', () => {
+      console.group('Grouping')
+    })
+    errorBtns[5].addEventListener('click', () => {
+      console.groupEnd()
+    })
+    errorBtns[6].addEventListener('click', () => {
+      console.table([
+        { name: 'Ethan', major: 'Computer Science' },
+        { name: 'John', major: 'Cognitive Science' },
+        { name: 'Alan', major: 'Cat Science' }
+      ]);
+    })
+    errorBtns[7].addEventListener('click', () => {
+      console.time();
+    })
+    errorBtns[8].addEventListener('click', () => {
+      console.timeEnd();
+    })
+    errorBtns[9].addEventListener('click', () => {
+      const first = () => { second() }
+      const second = () => { third() }
+      const third = () => { four() }
+      const four = () => { console.trace() }
+      first()
+    })
+    class CustomError extends Error {
+      constructor(message) {
+        super(message)
+        this.name = "CustomError"
+      }
+    }
+    function throwErr() {
+      throw new CustomError("Error")
+    }
+    errorBtns[10].addEventListener('click', () => {
+      test()
+    })
   </script>
 </body>
+
 </html>
